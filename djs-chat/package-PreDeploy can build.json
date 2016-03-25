@@ -29,14 +29,7 @@
       "live-reload",
       "node_modules/can-zone/register"
     ],
-    "npmAlgorithm": "flat",
-    
-    "envs": {
-      "server-production": {
-      "renderingBaseURL": "https://djs-chat-malcolmgc.firebaseapp.com/"
-      }
-    }
-
+    "npmAlgorithm": "flat"
   },
   "dependencies": {
     "bit-tabs": "^0.2.0",
@@ -62,27 +55,5 @@
     "steal-qunit": "^0.1.1",
     "steal-tools": "^0.15.0",
     "testee": "^0.2.4"
-  },
-  "donejs": {
-    "deploy": {
-      "root": "dist",
-      "services": {
-        "production": {
-          "type": "firebase",
-          "config": {
-            "firebase": "djs-chat-malcolmgc",
-            "public": "./dist",
-            "headers": [{
-              "source": "/**",
-              "headers": [{
-                "key": "Access-Control-Allow-Origin",
-                "value": "*"
-              }]
-            }]
-          }
-        }
-      }
-    }
   }
- 
 }

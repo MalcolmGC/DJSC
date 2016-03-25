@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+  </head>
+  <body>
+    <div id='messagesDiv'></div>
+    <input type='text' id='nameInput' placeholder='Name'>
+    <input type='text' id='messageInput' placeholder='Message'>
+    <script>
+      var myDataRef = new Firebase('https://oywyb01xyee.firebaseio-demo.com/');
+      $('#messageInput').keypress(function (e) {
+        if (e.keyCode == 13) {
+          var name = $('#nameInput').val();
+          var text = $('#messageInput').val();
+          myDataRef.push({name: name, text: text});
+          $('#messageInput').val('');
+        }
+      });
+      myDataRef.on('child_added', function(snapshot) {
+        var message = snapshot.val();
+		displayChatMessage(message.name, message.text);
+      });
+      function displayChatMessage(name, text) {
+        $('<div/>').text(text).prepend($('<em/>').text(name+': ')).appendTo($('#messagesDiv'));
+        $('#messagesDiv')[0].scrollTop = $('#messagesDiv')[0].scrollHeight;
+      };
+    </script>
+  </body>
+</html>
+<!--
+myDataRef now references your Firebase database at https://oywyb01xyee.firebaseio-demo.com/  
+A core concept of the Firebase database is that every piece of data has its own URL. 
+You can use this URL to access your data in several ways:
+  From any Firebase client library
+  From our REST API
+  By entering it in any browser (Try clicking the link above).  
+-------------------------------
+Tip: In addition to 'child_added' events, Firebase has 4 other event types.
+Read Event Types
+
+Value
+
+The value event is used to read a static snapshot of the contents at a given database path, as they existed at the time of the read event. It is triggered once with the initial data and again every time the data changes. The event callback is passed a snapshot containing all data at that location, including child data. In our code example above, value returned all of the blog posts in our app. Everytime a new blog post is added, the callback function will return all of the posts.
+Child Added
+
+The child_added event is typically used when retrieving a list of items from the database. Unlike value which returns the entire contents of the location, child_added is triggered once for each existing child and then again every time a new child is added to the specified path. The event callback is passed a snapshot containing the new child's data. For ordering purposes, it is also passed a second argument containing the key of the previous child.
+
+If we wanted to retrieve only the data on each new post added to our blogging app, we could use child_added:
+
+// Get a reference to our posts
+var ref = new Firebase("https://docs-examples.firebaseio.com/web/saving-data/fireblog/posts");
+// Retrieve new posts as they are added to our database
+ref.on("child_added", function(snapshot, prevChildKey) {
+  var newPost = snapshot.val();
+  console.log("Author: " + newPost.author);
+  console.log("Title: " + newPost.title);
+  console.log("Previous Post ID: " + prevChildKey);
+});
+In this example the snapshot will contain an object with an individual blog post. Because we converted our post to an object using val(), we have access to the post's author and title properties by calling author and title respectively. We also have access to the previous post ID from the second prevChildKey argument.
+Child Changed
+
+The child_changed event is triggered any time a child node is modified. This includes any modifications to descendants of the child node. It is typically used in conjunction with child_added and child_removed to respond to changes to a list of items. The snapshot passed to the event callback contains the updated data for the child.
+
+We can use child_changed to read updated data on blog posts when they are edited:
+
+// Get a reference to our posts
+var ref = new Firebase("https://docs-examples.firebaseio.com/web/saving-data/fireblog/posts");
+// Get the data on a post that has changed
+ref.on("child_changed", function(snapshot) {
+  var changedPost = snapshot.val();
+  console.log("The updated post title is " + changedPost.title);
+});
+Child Removed
+
+The child_removed event is triggered when an immediate child is removed. It is typically used in conjunction with child_added and child_changed. The snapshot passed to the event callback contains the data for the removed child.
+
+In our blog example, we'll use child_removed to log a notification about the deleted post to the console:
+
+// Get a reference to our posts
+var ref = new Firebase("https://docs-examples.firebaseio.com/web/saving-data/fireblog/posts");
+// Get the data on a post that has been removed
+ref.on("child_removed", function(snapshot) {
+  var deletedPost = snapshot.val();
+  console.log("The blog post titled '" + deletedPost.title + "' has been deleted");
+});
+Child Moved
+
+The child_moved event is used when working with ordered data, which is covered in the next section.
+  
+  
+  -->
+
+
