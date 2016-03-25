@@ -6,7 +6,7 @@ import 'can/route/pushstate/';
 const AppViewModel = Map.extend({
   define: {
     title: {
-      value: 'donejs-chat',
+      value: 'djs-chat',
       serialize: false
     }
   }
