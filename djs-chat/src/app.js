@@ -5,15 +5,13 @@ import 'can/route/pushstate/';
 
 const AppViewModel = Map.extend({
   define: {
-    message: {
-      value: 'Hello World!',
-      serialize: false
-    },
     title: {
-      value: 'djs-chat',
+      value: 'donejs-chat',
       serialize: false
     }
   }
 });
+
+route('/:page', { page: 'home' });
 
 export default AppViewModel;
